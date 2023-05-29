@@ -1,0 +1,28 @@
+def schedule_jobs(jobs):
+    # Sort jobs based on their deadlines in ascending order
+    sorted_jobs = sorted(jobs, key=lambda x: x['deadline'])
+
+    # Initialize the schedule and current time
+    schedule = []
+    current_time = 0
+
+    # Process each job
+    for job in sorted_jobs:
+        # Check if the job can be scheduled
+        if current_time + job['duration'] <= job['deadline']:
+            # Schedule the job
+            schedule.append(job['name'])
+            current_time += job['duration']
+
+    return schedule
+
+jobs = [
+    {'name': 'Job1', 'duration': 4, 'deadline': 6},
+    {'name': 'Job2', 'duration': 3, 'deadline': 8},
+    {'name': 'Job3', 'duration': 2, 'deadline': 5},
+    {'name': 'Job4', 'duration': 5, 'deadline': 7},
+    {'name': 'Job5', 'duration': 1, 'deadline': 3}
+]
+
+ans = schedule_jobs(jobs)
+print("Job Schedule:", ans) 

@@ -1,0 +1,52 @@
+class Graph:
+    def _init_(self, vertices):
+        self.vertices = vertices
+        self.edges = []
+
+    def add_edge(self, u, v, weight):
+        self.edges.append((u, v, weight))
+
+    def find(self, parent, vertex):
+        if parent[vertex] == vertex:
+            return vertex
+        return self.find(parent, parent[vertex])
+
+    def union(self, parent, rank, vertex1, vertex2):
+        root1 = self.find(parent, vertex1)
+        root2 = self.find(parent, vertex2)
+        if rank[root1] < rank[root2]:
+            parent[root1] = root2
+        elif rank[root1] > rank[root2]:
+            parent[root2] = root1
+        else:
+            parent[root2] = root1
+            rank[root1] += 1
+
+    def kruskal_mst(self):
+        mst = []
+        self.edges.sort(key=lambda x: x[2])
+        parent = {vertex: vertex for vertex in self.vertices}
+        rank = {vertex: 0 for vertex in self.vertices}
+
+        for u, v, weight in self.edges:
+            root1 = self.find(parent, u)
+            root2 = self.find(parent, v)
+            if root1 != root2:
+                mst.append((u, v, weight))
+                self.union(parent, rank, root1, root2)
+
+        return mst
+
+
+# Example usage:
+vertices = ['A', 'B', 'C', 'D', 'E']
+graph = Graph(vertices)
+graph.add_edge('A', 'B', 5)
+graph.add_edge('A', 'C', 3)
+graph.add_edge('B', 'D', 2)
+graph.add_edge('C', 'D', 4)
+graph.add_edge('C', 'E', 6)
+graph.add_edge('D', 'E', 1)
+
+mst = graph.kruskal_mst()
+print(mst)

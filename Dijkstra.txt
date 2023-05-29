@@ -1,0 +1,38 @@
+#import sys
+
+def dijkstra(graph, start):
+    # Initialize distances and visited dictionary
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    visited = {}
+
+    while distances:
+        # Find the node with the shortest distance
+        min_node = min(distances, key=distances.get)
+        distance = distances.pop(min_node)
+        visited[min_node] = distance
+
+        # Update distances of neighboring nodes
+        for neighbor, weight in graph[min_node].items():
+            if neighbor not in visited:
+                new_distance = distance + weight
+                if new_distance < distances.get(neighbor):
+                    distances[neighbor] = new_distance
+
+    return visited
+
+# Example graph
+graph = {
+    'A': {'B': 3, 'C': 2},
+    'B': {'A': 3, 'C': 1, 'D': 5},
+    'C': {'A': 2, 'B': 1, 'D': 2},
+    'D': {'B': 5, 'C': 2}
+}
+
+start_node = 'A'
+distances = dijkstra(graph, start_node)
+
+# Print the shortest distances from the start node
+print("Shortest distances from node", start_node)
+for node, distance in distances.items():
+    print("Node:", node, "Distance:", distance)
